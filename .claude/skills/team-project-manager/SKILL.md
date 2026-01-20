@@ -30,7 +30,13 @@ Before starting, read `.claude/local/config.md` to get machine-specific paths:
    TEAM_NAME = <team-name>
    ```
 
-2. **Read jam name from brief:**
+2. **Read jam configuration:**
+   Parse `$JAM_DIR/config.md` for:
+   ```
+   VISIBILITY = public | private | local
+   ```
+
+3. **Read jam name from brief:**
    Parse the `## Name` section from `$JAM_DIR/brief.md`
    ```
    JAM_NAME = <parsed-name>
@@ -38,12 +44,12 @@ Before starting, read `.claude/local/config.md` to get machine-specific paths:
    REPO_DIR = $GAME_REPOS_DIR/$REPO_NAME
    ```
 
-3. **Update status:**
+4. **Update status:**
    ```bash
    echo "initializing" > $TEAM_DIR/status.txt
    ```
 
-4. **Initialize team log:**
+5. **Initialize team log:**
    Write to `$TEAM_DIR/log.md`:
    ```markdown
    # Team <name> Development Log
@@ -75,24 +81,52 @@ Before starting, read `.claude/local/config.md` to get machine-specific paths:
    Document choice in team log.
 
 3. **Create game repository:**
+
+   **If VISIBILITY = public:**
    ```bash
    mkdir -p $REPO_DIR && cd $REPO_DIR
    git init
    gh repo create $REPO_NAME --public --source=. --push
    gh repo edit $REPO_NAME --delete-branch-on-merge
-   ```
-
-4. **Create initial README:**
-   ```bash
    echo "# $REPO_NAME\n\nGame jam entry by Team $TEAM_NAME" > README.md
    git add README.md
    git commit -m "Initial commit"
    git push -u origin master
    ```
 
-5. **Log completion:**
+   **If VISIBILITY = private:**
+   ```bash
+   mkdir -p $REPO_DIR && cd $REPO_DIR
+   git init
+   gh repo create $REPO_NAME --private --source=. --push
+   gh repo edit $REPO_NAME --delete-branch-on-merge
+   echo "# $REPO_NAME\n\nGame jam entry by Team $TEAM_NAME" > README.md
+   git add README.md
+   git commit -m "Initial commit"
+   git push -u origin master
    ```
-   [HH:MM:SS] Repository created: https://github.com/.../$REPO_NAME
+
+   **If VISIBILITY = local:**
+   ```bash
+   mkdir -p $REPO_DIR && cd $REPO_DIR
+   git init
+   echo "# $REPO_NAME\n\nGame jam entry by Team $TEAM_NAME" > README.md
+   git add README.md
+   git commit -m "Initial commit"
+   ```
+   (No GitHub repo created, local only)
+
+4. **Log completion:**
+
+   **If public or private:**
+   ```
+   [HH:MM:SS] Repository created: https://github.com/.../$REPO_NAME (visibility)
+   [HH:MM:SS] Tech stack: [chosen stack]
+   ```
+
+   **If local:**
+   ```
+   [HH:MM:SS] Local repository created: $REPO_DIR
    [HH:MM:SS] Tech stack: [chosen stack]
    ```
 
@@ -208,22 +242,53 @@ Before starting, read `.claude/local/config.md` to get machine-specific paths:
    ```
 
 2. **Spawn Release Engineer agent:**
-   - Provide: Repo path, GDD for context
-   - Wait for final commit and push
+   - Provide: Repo path, GDD for context, visibility setting
+   - Wait for final commit (and push if public/private)
 
-3. **Get repo URL:**
+3. **Get repo location:**
+
+   **If public or private:**
    ```bash
    gh repo view --json url -q .url
    ```
 
+   **If local:**
+   Use local path: `$REPO_DIR`
+
 4. **Write submission file:**
    Write to `$TEAM_DIR/submission.md`:
+
+   **If public or private:**
    ```markdown
    # Team <name> Submission
 
    ## Game
    **Title:** [from GDD]
    **Repo:** [GitHub URL]
+   **Local Path:** [REPO_DIR path]
+
+   ## Summary
+   [Elevator pitch from GDD]
+
+   ## Features Implemented
+   - [MVP feature 1]
+   - [MVP feature 2]
+   - [etc.]
+
+   ## Tech Stack
+   [What was used]
+
+   ## Notes
+   [Any relevant notes for judges]
+   ```
+
+   **If local:**
+   ```markdown
+   # Team <name> Submission
+
+   ## Game
+   **Title:** [from GDD]
+   **Local Path:** [REPO_DIR path]
 
    ## Summary
    [Elevator pitch from GDD]

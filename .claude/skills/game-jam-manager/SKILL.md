@@ -12,11 +12,16 @@ You are the Game Jam Manager, orchestrating a virtual game jam competition. You 
 - `--teams N` (optional): Number of teams to spawn. Default: 3
 - `--brief path` (optional): Path to existing brief file. If not provided, create interactively.
 - `--jam-id ID` (optional): Custom jam identifier. Default: generated from timestamp.
+- `--public` (optional): Create public GitHub repos.
+- `--private` (optional): Create private GitHub repos.
+- `--local` (optional): Work locally only. No GitHub repos created.
+- If none specified: ask user which visibility to use.
 
 **Examples:**
-- `/game-jam-manager` - Interactive brief creation, 3 teams
-- `/game-jam-manager --teams 2` - Two teams, interactive brief
-- `/game-jam-manager --brief .claude/jams/my-brief.md` - Use existing brief
+- `/game-jam-manager` - Interactive brief creation, 3 teams, asks about visibility
+- `/game-jam-manager --teams 2 --local` - Two teams, local only
+- `/game-jam-manager --private` - Private GitHub repos
+- `/game-jam-manager --public --brief .claude/jams/my-brief.md` - Public repos with existing brief
 
 ## Local Configuration
 
@@ -32,6 +37,8 @@ Before starting, read `.claude/local/config.md` to get machine-specific paths:
    - Extract team count (default: 3)
    - Check for existing brief path
    - Generate jam ID: `YYYYMMDD-HHMMSS` format
+   - Check for `--public`, `--private`, or `--local` flag
+   - If none specified, ask user: "What visibility should this jam have? (public/private/local)"
 
 2. **Create jam directory structure:**
    ```bash
@@ -39,7 +46,17 @@ Before starting, read `.claude/local/config.md` to get machine-specific paths:
    mkdir -p $JAM_DIR/{teams/alpha,teams/bravo,teams/charlie,judging}
    ```
 
-3. **Create or copy brief:**
+3. **Write jam config:**
+   Write to `$JAM_DIR/config.md`:
+   ```markdown
+   # Jam Configuration
+
+   - **Visibility:** public | private | local
+   ```
+
+   This config is read by team-project-manager to determine GitHub repo visibility (or local-only).
+
+4. **Create or copy brief:**
 
    **If brief provided:**
    - Copy to `$JAM_DIR/brief.md`
@@ -61,19 +78,20 @@ Before starting, read `.claude/local/config.md` to get machine-specific paths:
    - Write brief using template at `.claude/templates/brief-template.md`
    - Save to `$JAM_DIR/brief.md`
 
-4. **User approves brief:**
+5. **User approves brief:**
    - Show the user the complete brief
    - Ask for approval before proceeding
    - If user requests changes, update the brief and show again
    - **Do not proceed to spawning teams until user explicitly approves**
    - **Once approved, run all remaining phases autonomously without further prompts**
 
-5. **Initialize run log:**
+6. **Initialize run log:**
    ```markdown
    # Game Jam: <jam-id>
 
    **Started:** YYYY-MM-DD HH:MM:SS
    **Teams:** N
+   **Visibility:** public | private | local
    **Brief:** [Theme summary]
 
    ---
@@ -212,7 +230,7 @@ When all teams complete:
 2. **Present to user:**
    - Final rankings
    - Category awards
-   - Links to all repos
+   - Links to repos (public/private) or local paths (local jams)
    - Summary of the jam
 
 3. **Update run log with final summary**

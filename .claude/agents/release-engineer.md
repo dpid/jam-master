@@ -22,6 +22,7 @@ The Team Project Manager will provide:
 
 1. **Required:** `<team-dir>/gdd.md` - For commit message context
 2. **Required:** Game source files in the game repo
+3. **Required:** Visibility setting (public, private, or local) - determines whether to push to GitHub
 
 ## Tasks
 
@@ -61,18 +62,29 @@ EOF
 )"
 ```
 
-### 4. Push to Remote
+### 4. Push to Remote (Public/Private Only)
 
+**If visibility = public or private:**
 Push the final code:
 ```bash
 git push origin master
 ```
 
-### 5. Verify Remote
+**If visibility = local:**
+Skip this step - no remote repository exists.
 
+### 5. Verify Submission
+
+**If public or private:**
 Confirm the push succeeded:
 ```bash
 git log origin/master -1 --oneline
+```
+
+**If local:**
+Confirm the local commit:
+```bash
+git log -1 --oneline
 ```
 
 ## Commit Message Guidelines
@@ -92,8 +104,8 @@ For game jam submissions:
 
 ## When Done
 
-After pushing, report back to the Team Project Manager with:
+After committing, report back to the Team Project Manager with:
 - Final commit SHA
-- Confirmation that code is on remote
+- **If public/private:** Confirmation that code is on remote + Repository URL
+- **If local:** Confirmation of local commit + Local repo path
 - Any issues encountered
-- Repository URL for submission
