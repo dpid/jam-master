@@ -56,6 +56,7 @@ You'll be asked about:
 4. Bonus challenges
 5. Constraints
 6. Number of teams
+7. Visibility (public/private/local)
 
 After approving the brief, teams spawn and work autonomously. Results appear when all teams finish.
 
@@ -64,6 +65,9 @@ After approving the brief, teams spawn and work autonomously. Results appear whe
 ```
 /game-jam-manager --teams 2              # Run with 2 teams
 /game-jam-manager --brief path/to.md     # Use existing brief
+/game-jam-manager --public               # Create public GitHub repos
+/game-jam-manager --private              # Create private GitHub repos
+/game-jam-manager --local                # Local only, no GitHub
 ```
 
 ## How It Works
@@ -95,14 +99,14 @@ Each team follows this workflow:
 3. **Plan Reviewer** - Reviews and requests changes (up to 3 iterations)
 4. **Senior Developer** - Implements the game
 5. **Code Reviewer** - Reviews code (up to 3 iterations)
-6. **Release Engineer** - Commits and pushes to GitHub
+6. **Release Engineer** - Commits and pushes (if not local)
 
 ## Agents
 
 | Agent | Role | Model |
 |-------|------|-------|
 | designer | Create GDD from brief | Sonnet |
-| architect | Design implementation plan | Sonnet |
+| architect | Design implementation plan | Opus |
 | plan-reviewer | Review implementation plan | Sonnet |
 | senior-developer | Implement the game | Sonnet |
 | code-reviewer | Review game code | Sonnet |
