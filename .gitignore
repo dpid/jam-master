@@ -1,0 +1,9 @@
+# Local configuration (contains machine-specific paths)
+.claude/local/config.md
+.claude/settings.local.json
+
+# Jam run data (generated)
+.claude/jams/
+
+# Node
+node_modules/

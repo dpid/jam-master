@@ -1,0 +1,8 @@
+# Local Configuration
+
+Copy this file to `config.md` and update the paths for your machine.
+
+## Paths
+
+- **JAM_MASTER_DIR:** /path/to/jam-master
+- **GAME_REPOS_DIR:** /path/to/game-jams
